@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}ARTICULO{% endblock titulo %}
+
+{% block contenido %}
+    <h2>Aca esta mi articulo detallado</h2>
+
+    <img src="{{articulo.imagen.url}}" width="50">
+    <p>TITULO: {{articulo.titulo}}</p>
+    <p>FECHA: {{articulo.fecha_publicacion}}</p>
+    <p>CATEGORIA: {{articulo.categoria_articulo}}</p>
+    <p>CONTENIDO: {{articulo.contenido}}</p>
+    
+{% endblock contenido %}

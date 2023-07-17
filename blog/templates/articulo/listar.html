@@ -5,4 +5,13 @@
 
 {% block contenido %}
     <h2>Acá están todos los artículos</h2>
+
+    {% for art in articulo %}
+        <img scr="{{art.imagen.url}}" width="50">
+        <p>TITULO: {{art.titulo}}</p>
+        <p>FECHA: {{art.fecha_publicacion}}</p>
+        <p>CATEGORIA: {{art.categoria_articulo}}</p>
+        <p>CONTENIDO: {{art.contenido}}</p>
+    {% endfor %}    
+    
 {% endblock contenido %}
