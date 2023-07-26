@@ -1,5 +1,5 @@
 from django import forms
-from .models import Articulo, Comentario
+from .models import Articulo, Comment
 
 class ArticuloForm(forms.ModelForm):
     
@@ -8,10 +8,16 @@ class ArticuloForm(forms.ModelForm):
         fields = ['titulo', 'resumen', 'contenido', 'imagen', 'categoria_articulo']
 
 # CREAR COMENTARIOS
-class ComentarioForm(forms.ModelForm):
+class CommentForm(forms.ModelForm):
     
     class Meta:
-        model = Comentario
+        model = Comment
         fields = ['text'] #campos de mi formulario
-       
+        exclude = ['author']
+    
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(CommentForm, self).__init__(*args, **kwargs)
+        if user:
+            self.instance.author = user.username
    

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Usuario
+from django.contrib.auth import authenticate, login
 
 
 class RegistroForm(UserCreationForm):
@@ -22,3 +23,15 @@ class RegistroForm(UserCreationForm):
             'password1',
             'password2'
         ]
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label='Nombre de usuario')
+    password = forms.CharField(label='Contraseña, widget=forms.PasswordImput')
+
+    def login(self, request):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+

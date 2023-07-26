@@ -1,3 +1,51 @@
 .contenedor {
     background-color:cadetblue;
 }
+
+/* DROPDOWN CONTENIDO DE LISTAR NOTICIAS */
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-btn {
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /*CUANDO EL CURSOR ESTA SOBRE EL BOTON*/
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  .arrow-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .arrow-btn:focus {
+    outline: none;
+  }
+  

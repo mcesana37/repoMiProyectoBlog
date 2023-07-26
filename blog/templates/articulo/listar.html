@@ -1,16 +1,46 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block titulo %}ARTICULO{% endblock titulo %}
+{% block titulo %}ARTICULOS{% endblock titulo %}
 
 {% block contenido %}
-    <h2>Acá están todos los artículos</h2>
-    {% for art in articulo %}
-        <img scr="{{ art.imagen.url }}" width="50">
-        <p><a href="{% url 'articulo:detalle' art.pk %}">TITULO: {{ art.titulo }}</a></p>
-        <p>FECHA: {{ art.fecha_publicacion }}</p>
-        <p>CATEGORIA: {{ art.categoria_articulo }}</p>
-        <p>CONTENIDO: {{ art.contenido }}</p>
-    {% endfor %}    
-    
+    <h2>Aquí están mis artículos</h2>
+    <div class="submenu">
+        <div class="dropdown">
+            <button class="dropdown-btn">Categorías</button>
+            <div class="dropdown-content">
+            <a href="{% url 'articulo:listar' %}">Todas los artículos</a>
+            {% for cat in categorias %}
+            <a href="?categoria={{ cat.pk }}">{{ cat.nombre }}</a>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropdown-btn">Ordenar</button>
+            <div class="dropdown-content">
+                <a href="?antiguedad_asc=1">Más antiguas primero</a>
+                <a href="?antiguedad_desc=1">Más recientes primero</a>
+                <a href="?orden_asc=1">Orden alfabético ascendente</a>
+                <a href="?orden_desc=1">Orden alfabético descendente</a>
+            </div>
+        </div>
+        <a href="?antiguedad_asc=1">
+            <button class="arrow-btn">&#11014;</button>
+          </a>
+          <a href="?antiguedad_desc=1">
+            <button class="arrow-btn">&#11015;</button>
+          </a>
+    </div>
+    <br>
+    {% if articulo %}
+        {% for art in articulo %}
+            <img src="{{ art.imagen.url }}" width="20%">
+            <p><a href="{% url 'articulo:detalle' art.pk %}">TITULO: {{ art.titulo }}</a></p>
+            <p>FECHA: {{ art.fecha_publicacion }}</p>
+            <p>CATEGORIA: {{ art.categoria_articulo }}</p>
+            <p>CONTENIDO: {{ art.contenido }}</p>
+        {% endfor %}
+    {% else %}
+        <h2>No hay articulos</h2>
+    {% endif %}
 {% endblock contenido %}

@@ -2,12 +2,52 @@
 {% load static %}
 
 {% block contenido %}
-    <h2>Aca esta mi articulo detallado</h2>
+    <h2>Mi articulo detallado</h2>
+    {% if user.is_authenticated and articulo.author == user or user.is_staff or user.is_superuser %}
+        <a href="{% url 'articulo:editarArticulo' pk=articulo.pk %}">Editar</a>
 
-    <img src="{{ articulo.imagen.url }}" width="50">
-    <p>TITULO: {{articulo.titulo}}</p>
-    <p>FECHA: {{articulo.fecha_publicacion}}</p>
-    <p>CATEGORIA: {{articulo.categoria_articulo}}</p>
-    <p>CONTENIDO: {{articulo.contenido}}</p>
-    
+        <form method="POST" action="{% url 'articulo:detalle' pk=articulo.pk %}">
+            {% csrf_token %}
+            <button type="submit" name="delete_articulo">BORRAR</button>
+        </form>
+    {% endif %}
+    <img src="{{ articulo.imagen.url }}" width="20%">
+    <p>TITULO: {{ articulo.titulo }}</p>
+    <p>FECHA: {{ articulo.fecha_publicacion }}</p>
+    <p>AUTOR: {{ articulo.author }}</p>
+    <p>CATEGORIA: {{ articulo.categoria_articulo }}</p>
+    <p>CUERPO: {{ articulo.contenido }}</p>
+    <br>
+
+    <h3>Comentarios</h3>
+    {% for comment in comments %}
+        <p><img src="{{user.imagen.url}}" style="height: 2rem; border-radius: 10%;"></img>{{ comment.author }}</p>
+        <p>{{ comment.author }} - {{ comment.created_at }}</p>
+        <p>{{ comment.text }}</p>
+        <form method="POST" action="{% url 'articulo:delete_comment' comment.id %}">
+            {% csrf_token %}
+            {% if comment.author == user.username or user.is_staff or user.is_superuser %}
+                <button type="submit">Borrar comentario</button>
+                <a href="{% url 'articulo:edit_comment' comment_id=comment.id %}">Editar comentario</a>
+            {% endif %}
+        </form>
+        <hr>
+    {% empty %}
+        <p>No hay comentarios.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <h3>Añadir Comentario</h3>
+        <form method="POST" action="{% url 'articulo:add_comment' articulo.pk %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Enviar</button>
+        </form>
+    {% else %}
+        <p>Debe iniciar sesión para añadir un comentario</p>
+        <a href="{% url 'login' %}">LOGIN</a>
+    {% endif %}
+
+    <br><br>
+    <a href="{% url 'articulo:listar' %}">VOLVER</a>
 {% endblock contenido %}
