@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from .models import Articulo, Categoria, Comment, Usuario
 from django.views.generic.list import ListView #para las vistas clases
 from .forms import ArticuloForm, CommentForm
@@ -9,22 +10,14 @@ from django.http import HttpResponseForbidden
 
 
 # Create your views here.
-@login_required
-def AddArticulo(request):
-    if request.method == 'POST':
-        form = ArticuloForm(request.POST, request.FILES) ##REQUEST FILE PARA LAS IMAGENES
-        if form.is_valid():
-            articulo = form.save(commit=False)
-            articulo.author = request.user #autor del articulo            
-            return redirect('home')
-    else:
-        form = ArticuloForm()
-    
-    return render(request, 'articulo/addArticulo.html', {'form': form})
-
-
 def ListarArticulos(request):
     articulo = Articulo.objects.all()
+
+    # Filtrar por categoría
+    categoria = request.GET.get('categoria')
+    if categoria:
+        articulo = articulo.filter(categoria_articulo=categoria)
+
 
     #FILTRAR POR ANTIGÜEDAD DESDE EL MÁS RECIENTE (DESCENDENTE)
     antiguedad_desc = request.GET.get('antiguedad_desc')
@@ -46,14 +39,10 @@ def ListarArticulos(request):
     if orden_desc:
         articulo = articulo.order_by('-titulo')
 
-     # Filtrar por categoría
-    categoria = request.GET.get('categoria')
-    if categoria:
-        articulo = articulo.filter(categoria_articulo=categoria)
-
+    
     context = {
         'articulo': articulo,
-        'categoria': Categoria.objects.all(),  
+        'categorias': Categoria.objects.all(),  
     }
     return render(request, 'articulo/listar.html', context)  
    
@@ -127,9 +116,24 @@ def edit_comment(request, comment_id):
 
     context = {
         'form': form,
-        'comentario': comment,
+        'comment': comment,
     }
     return render(request, 'articulo/editComentario.html', context)
+
+@login_required
+def AddArticulo(request):
+    if request.method == 'POST':
+        form = ArticuloForm(request.POST, request.FILES) ##REQUEST FILE PARA LAS IMAGENES
+        if form.is_valid():
+            articulo = form.save(commit=False)
+            articulo.author = request.user #autor del articulo            
+            articulo.save()
+            return redirect('home')
+    else:
+        form = ArticuloForm()
+    
+    return render(request, 'articulo/addArticulo.html', {'form': form})
+
 
 @login_required
 def EditarArticulo(request, pk):
@@ -149,6 +153,5 @@ def EditarArticulo(request, pk):
 
     context = {
         'form': form,
-        'articulo': articulo,
     }
     return render(request, 'articulo/editArticulo.html', context)

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.views.generic import CreateView
 from .forms import RegistroForm
 from django.urls import reverse_lazy
-
+from .models import Usuario
 
 # Create your views here.
 def user_login(request):
