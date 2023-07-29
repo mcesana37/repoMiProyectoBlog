@@ -17,7 +17,7 @@ class Articulo(models.Model):
     #instalar una librería pillow
     imagen = models.ImageField(upload_to= 'articulo')
     categoria_articulo = models.ForeignKey(Categoria, on_delete= models.CASCADE)
-    author = models.ForeignKey(Usuario, on_delete=models.CASCADE) #default=Usuario.objects.get(is_superuser=True).pk)
+    author = models.ForeignKey(Usuario, on_delete=models.CASCADE) # default=Usuario.objects.get(is_superuser=True).pk)
 
     def __str__(self):
         return self.titulo

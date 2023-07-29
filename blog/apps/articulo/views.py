@@ -85,7 +85,7 @@ def add_comment(request, articulo_id):
     articulo = get_object_or_404(Articulo, id=articulo_id)
     if request.method == 'POST':
         text = request.POST.get('text')
-        author = request.user.username
+        author = request.user
         # creacion de comentario
         Comment.objects.create(articulo=articulo, author=author, text=text)
     return redirect('articulo:detalle', pk=articulo_id)
@@ -93,7 +93,7 @@ def add_comment(request, articulo_id):
 @login_required
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
-    if comment.author or comment.staff == request.user.username:
+    if comment.author or comment.staff == request.user:
         comment.delete()
     return redirect('articulo:detalle', pk=comment.articulo.pk)
 
@@ -102,7 +102,7 @@ def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
 
     #mensaje de error si no sos el autor
-    if comment.author != request.user.username:
+    if comment.author != request.user:
         messages.error(request, 'Usuario sin permisos para editar este comentario.')
         return redirect('articulo:detalle', pk=comment.articulo.pk)
 
@@ -140,8 +140,8 @@ def EditarArticulo(request, pk):
     articulo = get_object_or_404(Articulo, pk=pk)
 
     # Solo el autor puede editar la noticia
-    if articulo.author != request.user:
-        return HttpResponseForbidden("No tienes permisos para editar este artículo.")
+    #if articulo.author != request.user:
+       # return HttpResponseForbidden("No tienes permisos para editar este artículo.")
 
     if request.method == 'POST':
         form = ArticuloForm(request.POST, request.FILES, instance=articulo)

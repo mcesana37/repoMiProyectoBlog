@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.ListarArticulos, name='listar'),
     path('listarArticulo/', views.mostrarArticulo.as_view()), #clase
     path('detalle/<int:pk>', views.DetalleArticulo, name='detalle'),
-    path('addArticulo', views.AddArticulo, name='addarticulo'),
+    path('addArticulo', views.AddArticulo, name='addArticulo'),
     path('articulo/<int:pk>/edit/', views.EditarArticulo, name='editarArticulo'),
     #url comentarios
     path('comment/delete/<int:comment_id>/', views.delete_comment, name='delete_comment'),

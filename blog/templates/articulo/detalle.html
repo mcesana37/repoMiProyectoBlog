@@ -21,7 +21,8 @@
 
     <h3>Comentarios</h3>
     {% for comment in comments %}
-        <p><img src="{{user.imagen.url}}" style="height: 2rem; border-radius: 10%;"></img>{{ comment.author }}</p>
+        <!-- <img src="{{user.imagen.url}}" style="height: 2rem; border-radius: 10%;"></img>}} -->
+        </p>{{ comment.author }}</p>
         <p>{{ comment.text }}</p>
         <p>{{ comment.created_at }}</p>
         <form method="POST" action="{% url 'articulo:delete_comment' comment.id %}">
